@@ -1,4 +1,3 @@
-# Representação do grafo da imagem usando lista de adjacências (Dicionário)
 # Cada chave é um vértice, e o valor é outro dicionário com {número/nome do vértice vizinho: peso_da_aresta}
 grafo = {
     1: {2: 3, 3: 7, 4: 2},
@@ -26,40 +25,40 @@ def dijkstra_ilustrado(grafo, inicio):
     distancia = {v: float('inf') for v in vertices}
     predecessor = {v: None for v in vertices}
     visitados = set()
-    
+
     # A distância do vértice inicial para ele mesmo é sempre 0
     distancia[inicio] = 0
-    
+
     print("=================== ESTADO INICIAL ===================")
     exibir_tabela_estado(distancia, predecessor, visitados)
-    
+
     passo = 1
     while len(visitados) < len(vertices):
         # 2. Busca pelo vértice não visitado com a menor distância atual
         u = None
         menor_distancia = float('inf')
-        
+
         for v in vertices:
             if v not in visitados and distancia[v] < menor_distancia:
                 menor_distancia = distancia[v]
                 u = v
-        
+
         # Se u for None, os vértices restantes são inacessíveis (fim do algoritmo)
         if u is None:
             break
-            
+
         # Marcar o vértice escolhido como visitado
         visitados.add(u)
-        
+
         print(f"\n[PASSO {passo}] -> Escolhendo o Vértice V{u} (Menor distância provisória: {distancia[u]})")
-        
+
         # 3. Atualização (relaxamento) das distâncias dos vizinhos de 'u'
         print("Verificando vizinhos:")
         atualizou_algo = False
         for vizinho, peso in grafo[u].items():
             if vizinho not in visitados:
                 nova_distancia = distancia[u] + peso
-                
+
                 # Se encontramos um caminho mais curto, atualizamos
                 if nova_distancia < distancia[vizinho]:
                     print(f"  • Vizinho V{vizinho}: caminho antigo {distancia[vizinho]} -> novo caminho {nova_distancia} (via V{u})")
@@ -68,14 +67,14 @@ def dijkstra_ilustrado(grafo, inicio):
                     atualizou_algo = True
                 else:
                     print(f"  • Vizinho V{vizinho}: caminho mantido {distancia[vizinho]} (novo proposto seria {nova_distancia})")
-        
+
         if not atualizou_algo:
             print("  • Nenhum vizinho pendente recebeu um caminho menor.")
-            
+
         print(f"\n================ TABELA APÓS PASSO {passo} ================")
         exibir_tabela_estado(distancia, predecessor, visitados)
         passo += 1
-        
+
     return distancia, predecessor
 
 def mostrar_caminhos_finais(distancia, predecessor, inicio):
@@ -92,6 +91,9 @@ def mostrar_caminhos_finais(distancia, predecessor, inicio):
         print(f"Destino: V{v} | Custo Total: {distancia[v]:<2} | Caminho: {caminho_formatado}")
     print("=====================================================")
 
-# Executa o algoritmo iniciando no vértice 1
-distancias_finais, predecessores_finais = dijkstra_ilustrado(grafo, inicio=3)
-mostrar_caminhos_finais(distancias_finais, predecessores_finais, inicio=3)
+#Escolhe o vértice inicial
+vertice = int(input("Digite o número do vértice inicial: "))
+
+# Executa o algoritmo iniciando no vértice selecionado
+distancias_finais, predecessores_finais = dijkstra_ilustrado(grafo, inicio=vertice)
+mostrar_caminhos_finais(distancias_finais, predecessores_finais, inicio=vertice)
